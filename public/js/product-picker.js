@@ -30,7 +30,7 @@ var app = new Vue({
 
     },
     methods: {
-        clearAllFilters: function(){
+        clearAllFilters: function(){ 
             this.make = '';
             this.makes = [];
             this.model = '';
