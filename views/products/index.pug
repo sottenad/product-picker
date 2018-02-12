@@ -1,0 +1,97 @@
+extends ../layout
+
+block fullWidthContent
+    #app 
+        p.text-right 
+            | Found 
+            strong {{items.length}} 
+            | items in 
+            strong {{ticks}}ms
+        div.fullHeight
+            table.table.table-hover.sticky
+                thead
+                    
+                    th
+                        label Make
+                        br
+                        select#makes(v-model="make" @change="setFilter('make')")
+                            option ---
+                            option(v-for="item in makes") {{item}}
+                        span(v-if="currentFilters.indexOf('make') > -1" @click="clearFilter('make')")
+                            |&nbsp;
+                            i.fa-times-circle.fas
+                    th
+                        label Model
+                        br
+                        select#models(v-model="model" @change="setFilter('model')")
+                            option ---
+                            option(v-for="item in models") {{item}}
+                        span(v-if="currentFilters.indexOf('model') > -1" @click="clearFilter('model')")
+                            |&nbsp;
+                            i.fa-times-circle.fas
+                    th
+                        label Key Type
+                        br
+                        select#keyTypes(v-model="keyType" @change="setFilter('keyType')")
+                            option ---
+                            option(v-for="item in keyTypes") {{item}}
+                        span(v-if="currentFilters.indexOf('keyType') > -1" @click="clearFilter('keyType')")
+                            |&nbsp;
+                            i.fa-times-circle.fas
+                    th
+                        label Year
+                        br
+                        select#years(v-model="selectedYear" @change="setFilter('selectedYear')")
+                            option ---
+                            option(v-for="item in yearRange") {{item}} 
+                        span(v-if="currentFilters.indexOf('selectedYear') > -1" @click="clearFilter('selectedYear')")
+                            |&nbsp;
+                            i.fa-times-circle.fas
+                    th
+                        label Type
+                        br
+                        select#rsTypes(v-model="rsType" @change="setFilter('rsType')")
+                            option ---
+                            option(v-for="item in rsTypes") {{item}}
+                        span(v-if="currentFilters.indexOf('rsType') > -1" @click="clearFilter('rsType')")
+                            |&nbsp;
+                            i.fa-times-circle.fas
+                    th
+                        label Active Remote FOB's
+                        br
+                        select#activeRemotesFobs(v-model="activeRemotesFob" @change="setFilter('activeRemotesFob')")
+                            option ---
+                            option(v-for="item in activeRemotesFobs") {{item}}
+                        span(v-if="currentFilters.indexOf('activeRemotesFob') > -1" @click="clearFilter('activeRemotesFob')")
+                            |&nbsp;
+                            i.fa-times-circle.fas
+                    th
+                        label Part Number
+                        br
+                        select#partNumbers(v-model="partNumber" @change="setFilter('partNumber')")
+                            option ---
+                            option(v-for="item in partNumbers") {{item}}
+                        span(v-if="currentFilters.indexOf('partNumber') > -1" @click="clearFilter('partNumber')")
+                            |&nbsp;
+                            i.fa-times-circle.fas
+                    th
+                        label Cost
+                        br
+                        
+                tbody
+                    tr(v-for="item in items")
+                        td {{item.make}}
+                        td {{item.model}}
+                        td {{item.keyType}}
+                        td {{item.startYear}} &mdash; {{item.endYear}}
+                        td {{item.rsType}}
+                        td {{item.activeRemotesFobs}}
+                        td {{item.partNumber}}
+                        td {{item.cost}}
+            h4(v-if="items.length <= 0") Please select a make to begin.
+            h3.text-center(v-if="items.length >= 500") Exceeded maximum rows to return. Please filter further to see all results.
+
+            
+
+block footerscripts
+    script(src="./js/product-picker.js")
