@@ -96,8 +96,8 @@ var app = new Vue({
                         if (self.currentFilters.indexOf('endYear') == -1) self.endYears = self.getUnique(data, 'endYear');
                         if (self.currentFilters.indexOf('rsType') == -1) self.rsTypes = self.getUnique(data, 'rsType');
                         if (self.currentFilters.indexOf('activeRemotesFobs') == -1) self.activeRemotesFobs = self.getUnique(data, 'activeRemotesFobs');
-                        if (self.currentFilters.indexOf('make') == -1) self.partNumbers = self.getUnique(data, 'partNumber');
-                        if (self.currentFilters.indexOf('partNumber') == -1) self.costs = self.getUnique(data, 'cost');
+                        if (self.currentFilters.indexOf('partNumber') == -1) self.partNumbers = self.getUnique(data, 'partNumber');
+                        if (self.currentFilters.indexOf('cost') == -1) self.costs = self.getUnique(data, 'cost');
                         self.calculateYearRange();
                         self.ticks = res.ticks;
                         self.items = data;
@@ -128,7 +128,7 @@ var app = new Vue({
                 { key: 'cost', value: self.cost }
             ];
             columns.forEach(function (col) {
-                if (col.value.length > 0 && col.value != '---') {
+                if (col.value.length > 0) {
                     if (isNumeric(col.value)) {
                         q[col.key] = parseInt(col.value, 10);
                     } else {
