@@ -15,7 +15,6 @@ block fullWidthContent
                         label Make
                         br
                         select#makes(v-model="make" @change="setFilter('make')")
-                            option ---
                             option(v-for="item in makes") {{item}}
                         span(v-if="currentFilters.indexOf('make') > -1" @click="clearFilter('make')")
                             |&nbsp;
@@ -24,7 +23,6 @@ block fullWidthContent
                         label Model
                         br
                         select#models(v-model="model" @change="setFilter('model')")
-                            option ---
                             option(v-for="item in models") {{item}}
                         span(v-if="currentFilters.indexOf('model') > -1" @click="clearFilter('model')")
                             |&nbsp;
@@ -33,7 +31,6 @@ block fullWidthContent
                         label Key Type
                         br
                         select#keyTypes(v-model="keyType" @change="setFilter('keyType')")
-                            option ---
                             option(v-for="item in keyTypes") {{item}}
                         span(v-if="currentFilters.indexOf('keyType') > -1" @click="clearFilter('keyType')")
                             |&nbsp;
@@ -42,7 +39,6 @@ block fullWidthContent
                         label Year
                         br
                         select#years(v-model="selectedYear" @change="setFilter('selectedYear')")
-                            option ---
                             option(v-for="item in yearRange") {{item}} 
                         span(v-if="currentFilters.indexOf('selectedYear') > -1" @click="clearFilter('selectedYear')")
                             |&nbsp;
@@ -51,7 +47,6 @@ block fullWidthContent
                         label Type
                         br
                         select#rsTypes(v-model="rsType" @change="setFilter('rsType')")
-                            option ---
                             option(v-for="item in rsTypes") {{item}}
                         span(v-if="currentFilters.indexOf('rsType') > -1" @click="clearFilter('rsType')")
                             |&nbsp;
@@ -60,7 +55,6 @@ block fullWidthContent
                         label Active Remote FOB's
                         br
                         select#activeRemotesFobs(v-model="activeRemotesFob" @change="setFilter('activeRemotesFob')")
-                            option ---
                             option(v-for="item in activeRemotesFobs") {{item}}
                         span(v-if="currentFilters.indexOf('activeRemotesFob') > -1" @click="clearFilter('activeRemotesFob')")
                             |&nbsp;
@@ -69,7 +63,6 @@ block fullWidthContent
                         label Part Number
                         br
                         select#partNumbers(v-model="partNumber" @change="setFilter('partNumber')")
-                            option ---
                             option(v-for="item in partNumbers") {{item}}
                         span(v-if="currentFilters.indexOf('partNumber') > -1" @click="clearFilter('partNumber')")
                             |&nbsp;
@@ -87,7 +80,7 @@ block fullWidthContent
                         td {{item.rsType}}
                         td {{item.activeRemotesFobs}}
                         td {{item.partNumber}}
-                        td {{item.cost}}
+                        td ${{item.cost}}
             h4(v-if="items.length <= 0") Please select a make to begin.
             h3.text-center(v-if="items.length >= 500") Exceeded maximum rows to return. Please filter further to see all results.
 

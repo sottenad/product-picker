@@ -30,8 +30,35 @@ var app = new Vue({
 
     },
     methods: {
+        clearAllFilters: function(){
+            this.make = '';
+            this.makes = [];
+            this.model = '';
+            this.models = [];
+            this.keyType = '';
+            this.keyTypes = [];
+            this.selectedYear = '';
+            this.startYear = '';
+            this.startYears = [];
+            this.endYear = '';
+            this.endYears = [];
+            this.rsType = '';
+            this.rsTypes = [];
+            this.activeRemotesFob = '';
+            this.activeRemotesFobs = [];
+            this.partNumber = '';  
+            this.partNumbers = [];
+            this.cost = '';
+            this.costs = [];
+            this.currentFilters = [];
+        },
         clearFilter: function (term) {
-            this.currentFilters.splice(this.currentFilters.indexOf(term, 1));
+            //Make is special
+            if(term === 'make'){
+                this.clearAllFilters();
+            }else{
+                this.currentFilters.splice(this.currentFilters.indexOf(term, 1));
+            }
             this[term] = '';
             this.getItems();
         },
