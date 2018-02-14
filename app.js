@@ -35,6 +35,7 @@ const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
 const productController = require('./controllers/product');
+const wizardController = require('./controllers/wizard');
 
 
 /**
@@ -57,7 +58,7 @@ mongoose.connection.on('error', (err) => {
   console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
   process.exit();
 });
-
+mongoose.set('debug',true);
 /**
  * Express configuration.
  */
@@ -129,6 +130,8 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
 app.get('/products', productController.index);
 app.get('/products/all', productController.all);
 app.get('/products/distinct/:column', productController.findDistinct);
+
+app.get('/wizard', wizardController.index);
 
 /**
  * Primary app routes.

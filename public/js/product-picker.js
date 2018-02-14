@@ -88,7 +88,6 @@ var app = new Vue({
                     data: { query: self.buildQuery(), limit: self.limit },
                     success: function (res) {
                         var data = res.products;
-
                         if (self.currentFilters.indexOf('make') == -1) self.makes = self.getUnique(data, 'make');
                         if (self.currentFilters.indexOf('model') == -1) self.models = self.getUnique(data, 'model');
                         if (self.currentFilters.indexOf('keyType') == -1) self.keyTypes = self.getUnique(data, 'keyType');
@@ -101,7 +100,6 @@ var app = new Vue({
                         self.calculateYearRange();
                         self.ticks = res.ticks;
                         self.items = data;
-
                     },
                     error: function (e) {
                         rej(e)

@@ -4,6 +4,27 @@
 
 @import "themes/default/default";
 
+
+// Wizard
+span.year{
+  padding:10px;
+}
+
+.card{
+  border-radius:2px;
+  border:1px solid #eee;
+  padding:10px;
+  margin:0 10px;
+  text-align: center;
+  display:inline-block;
+  cursor:pointer;
+}
+.card.active{
+  background: #f2f2f2;
+  border-color:#3d86fc;
+}
+
+
 // Scaffolding
 // -------------------------
 th select{

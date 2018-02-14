@@ -36,12 +36,19 @@ exports.find = (req, res) => {
         console.log(q);
         const before = new Date()
 
-
-        Product.find(q).limit(limit).exec(function(err, products){
-            const after = new Date()
-            const ticks = after - before
-            res.json({ticks: ticks, products:products})
-        })
+        if(req.body.distinct){
+            Product.find(q).distinct(req.body.distinct).exec(function(err, items){
+                const after = new Date()
+                const ticks = after - before
+                res.json({ticks: ticks, results:items})
+            })
+        }else{
+            Product.find(q).limit(limit).exec(function(err, items){
+                const after = new Date()
+                const ticks = after - before
+                res.json({ticks: ticks, results:items})
+            })
+        }
     }else{
         res.json({'err':'Please include a mongoose - compatible object to find with'});
     }
