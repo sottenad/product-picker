@@ -87,7 +87,7 @@ var app = new Vue({
                     headers: { "HTTP_X_CSRF_TOKEN": csrftoken },
                     data: { query: self.buildQuery(), limit: self.limit },
                     success: function (res) {
-                        var data = res.products;
+                        var data = res.results;
                         if (self.currentFilters.indexOf('make') == -1) self.makes = self.getUnique(data, 'make');
                         if (self.currentFilters.indexOf('model') == -1) self.models = self.getUnique(data, 'model');
                         if (self.currentFilters.indexOf('keyType') == -1) self.keyTypes = self.getUnique(data, 'keyType');
@@ -99,7 +99,7 @@ var app = new Vue({
                         if (self.currentFilters.indexOf('cost') == -1) self.costs = self.getUnique(data, 'cost');
                         self.calculateYearRange();
                         self.ticks = res.ticks;
-                        self.items = data;
+                        self.items = res.results;
                     },
                     error: function (e) {
                         rej(e)

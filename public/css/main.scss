@@ -4,6 +4,9 @@
 
 @import "themes/default/default";
 
+#app{
+  padding:0 30px;
+}
 
 // Wizard
 span.year{
@@ -22,6 +25,12 @@ span.year{
 .card.active{
   background: #f2f2f2;
   border-color:#3d86fc;
+}
+
+.buttons{
+  margin-top:10px;
+  padding-top:20px;
+  border-top:1px solid #eee;
 }
 
 

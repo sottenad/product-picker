@@ -11,6 +11,7 @@ var app = new Vue({
         keyTypes: [],
         selectedKeyType: '',
         limit: 0,
+        selectedOptions: [],
         
         stage: 'year',
         stages: ['year','make','model', 'options']
@@ -20,8 +21,13 @@ var app = new Vue({
 
     },
     methods: {
+
         selectYear: function(){
             var self = this;
+
+            self.selectedMake = '';
+            self.selectedModel = '';
+            self.items = [];
 
             if(self.selectedYear.length <= 0){
                 alert('Please select a year to continue');
@@ -45,6 +51,10 @@ var app = new Vue({
         selectMake:function(){
             
             var self = this;
+
+            self.selectedModel = '';
+            self.items = [];
+
             if(self.selectedMake.length <= 0){
                 alert('Please select a make to continue');
                 return false;
@@ -73,6 +83,9 @@ var app = new Vue({
         },
         selectModel:function(){
             var self = this;
+            
+            self.items = [];
+
             if(self.selectedModel.length <= 0){
                 alert('Please select a model to continue');
                 return false;

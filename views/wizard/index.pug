@@ -2,13 +2,14 @@ extends ../layout
 
 block fullWidthContent
     #app 
-        h2 selected:
-        | {{selectedYear}} {{selectedMake}} {{selectedModel}}
+        p selected: {{selectedYear}} {{selectedMake}} {{selectedModel}}
+        
         br 
         #year(v-if="stage=='year'")
             span.year( v-for="year in years" :value="year" @click="selectedYear = year") {{year}}
             br
-            a.btn.btn-primary(@click="selectYear" :disabled="selectedYear == ''") Next
+            .buttons
+                a.btn.btn-primary(@click="selectYear" :disabled="selectedYear == ''") Next
 
         #make(v-if="stage == 'make'")
             h2 Select Make
@@ -17,7 +18,10 @@ block fullWidthContent
                     img.card-img-top(:src="'/img/makes/'+make+'.png'")
                     div.card-block.text-center
                         span {{make}}
-            a.btn.btn-primary(@click="selectMake" :disabled="selectedMake == ''") Next
+            .buttons
+                a.btn(@click="stage='year'; selectedMake=''") Back
+                | &nbsp;            
+                a.btn.btn-primary(@click="selectMake" :disabled="selectedMake == ''") Next
 
         #model(v-if="stage == 'model'")
             h2 Select model
@@ -26,13 +30,18 @@ block fullWidthContent
                     img.card-img-top(:src="'/img/models/'+model+'.png'")
                     div.card-block.text-center
                         span {{model}}
-            a.btn.btn-primary(@click="selectModel" :disabled="selectedModel == ''") Next
+            .buttons
+                a.btn(@click="stage='make'; selectedModel=''") Back
+                | &nbsp;                       
+                a.btn.btn-primary(@click="selectModel" :disabled="selectedModel == ''") Next
 
         #options(v-if="stage == 'options'")
             h2 Select options
             ul  
                 li(v-for="item in items")
                     span {{item}}
+            .buttons
+                a.btn(@click="stage='model'; selectedOptions=[]") Back    
 
 block footerscripts
     script(src="./js/wizard.js")
