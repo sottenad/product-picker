@@ -1,0 +1,11 @@
+extends ../layout
+
+block content
+
+    h2 #{title}
+    each d in data
+        a(href="/remotes/edit/"+d._id) #{d.name}
+        br
+
+block footerscripts
+    

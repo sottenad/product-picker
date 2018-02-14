@@ -37,7 +37,13 @@ var app = new Vue({
             $.ajax({
                 url: '/products/find',
                 method: 'POST',
-                data:{distinct: 'make', 'year': self.selectedYear},
+                data:{
+                    distinct: 'make', 
+                    query: {
+                        startYear: { $lte: self.selectedYear},
+                        endYear: { $gte: self.selectedYear}
+                    }
+                },
                 success: function (d) {
                     self.makes = d.results;
                     self.stage = 'make'

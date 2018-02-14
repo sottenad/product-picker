@@ -36,7 +36,8 @@ const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
 const productController = require('./controllers/product');
 const wizardController = require('./controllers/wizard');
-
+const featureController = require('./controllers/feature');
+const remoteController = require('./controllers/remote');
 
 /**
  * API keys and Passport configuration.
@@ -58,7 +59,7 @@ mongoose.connection.on('error', (err) => {
   console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
   process.exit();
 });
-mongoose.set('debug',true);
+
 /**
  * Express configuration.
  */
@@ -153,6 +154,13 @@ app.post('/account/profile', passportConfig.isAuthenticated, userController.post
 app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
+
+app.get('/remotes', remoteController.index);
+app.get('/remotes/new', remoteController.new);
+app.post('/remotes/new', remoteController.create);
+app.get('/remotes/edit/:remote_id', remoteController.edit);
+app.post('/remotes/edit/:remote_id', remoteController.update);
+app.get('/features', featureController.index);
 
 /**
  * API examples routes.

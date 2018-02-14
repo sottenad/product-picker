@@ -6,17 +6,19 @@ block fullWidthContent
         
         br 
         #year(v-if="stage=='year'")
-            span.year( v-for="year in years" :value="year" @click="selectedYear = year") {{year}}
-            br
+            .row
+                .card.year( v-for="year in years" :value="year" @click="selectedYear = year" :class="{active: selectedYear == year}") 
+                    .card-block
+                        span {{year}}
             .buttons
                 a.btn.btn-primary(@click="selectYear" :disabled="selectedYear == ''") Next
 
         #make(v-if="stage == 'make'")
             h2 Select Make
-            div.row
-                div.card(v-for="make in makes" @click="selectedMake = make" :class="{active: selectedMake == make}")
+            .row
+                .card(v-for="make in makes" @click="selectedMake = make" :class="{active: selectedMake == make}")
                     img.card-img-top(:src="'/img/makes/'+make+'.png'")
-                    div.card-block.text-center
+                    .card-block.text-center
                         span {{make}}
             .buttons
                 a.btn(@click="stage='year'; selectedMake=''") Back
@@ -28,7 +30,7 @@ block fullWidthContent
             .row
                 .card(v-for="model in models" @click="selectedModel = model" :class="{active: selectedModel == model}")
                     img.card-img-top(:src="'/img/models/'+model+'.png'")
-                    div.card-block.text-center
+                    .card-block.text-center
                         span {{model}}
             .buttons
                 a.btn(@click="stage='make'; selectedModel=''") Back
