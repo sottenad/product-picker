@@ -1,9 +1,10 @@
 var app = new Vue({
     el: "#app",
     data: {
+        selectedItem: '',
         items: [],
         makes: [],
-        selectedYear: '',
+        selectedYear: {},
         years: [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018],
         selectedMake: '',
         models: [],
@@ -11,51 +12,41 @@ var app = new Vue({
         keyTypes: [],
         selectedKeyType: '',
         limit: 0,
-        selectedOptions: [],
-        
-        stage: 'year',
-        stages: ['year','make','model', 'options']
+        features:[],
+        selectedRsType: '',
+        selectedRemoteType: '',
+        stage: 'make',
+        stages: ['make','model', 'year', 'options']
 
     },
     computed: {
-
+        selectedOptions: function(){
+            var self = this;
+            return this.items.filter(function(item){
+                if(self.selectedRemoteType && self.selectedRsType) {
+                    return item.remote.name == self.selectedRemoteType && item.rsType == self.selectedRsType 
+                }
+                if(self.selectedRemoteType) return item.remote.name == self.selectedRemoteType ;
+                if(self.selectedRsType) return item.rsType == self.selectedRsType ;
+                return true
+            })
+        }
     },
     methods: {
-
-        selectYear: function(){
+        startOver: function(){
             var self = this;
-
-            self.selectedMake = '';
+            self.selctedMake = '';
             self.selectedModel = '';
+            self.selectedYear = {};
+            self.items = [];
+            self.stage = 'make'
+        },        
+        selectMake:function(){
+            var self = this;
+            self.selectedModel = '';
+            self.selectedYear = {};
             self.items = [];
 
-            if(self.selectedYear.length <= 0){
-                alert('Please select a year to continue');
-                return false;
-            } 
-
-            $.ajax({
-                url: '/products/find',
-                method: 'POST',
-                data:{
-                    distinct: 'make', 
-                    query: {
-                        startYear: { $lte: self.selectedYear},
-                        endYear: { $gte: self.selectedYear}
-                    }
-                },
-                success: function (d) {
-                    self.makes = d.results;
-                    self.stage = 'make'
-                },
-                error: function (e) {
-                    console.log(e);
-                }
-
-            })
-        },
-        selectMake:function(){
-            
             var self = this;
 
             self.selectedModel = '';
@@ -70,11 +61,9 @@ var app = new Vue({
                 url: '/products/find',
                 method: 'POST',
                 data:{
-                    distinct:'model', 
+                    distinct:'model',
                     query:{
-                        'make': self.selectedMake,
-                        startYear: { $lte: self.selectedYear},
-                        endYear: { $gte: self.selectedYear}
+                        'make': self.selectedMake
                     }
                 },
                 success: function (d) {
@@ -90,6 +79,7 @@ var app = new Vue({
         selectModel:function(){
             var self = this;
             
+            self.selectedYear = {};
             self.items = [];
 
             if(self.selectedModel.length <= 0){
@@ -97,20 +87,18 @@ var app = new Vue({
                 return false;
             } 
             $.ajax({
-                url: '/products/find',
+                url: '/products/findYears',
                 method: 'POST',
                 data:{  
-                    year: self.selectedYear, 
+                    distinct: '',
                     query:{
                         'make': self.selectedMake, 
-                        model: self.selectedModel,
-                        startYear: { $lte: self.selectedYear},
-                        endYear: { $gte: self.selectedYear}
+                        model: self.selectedModel
                     }
                 },
                 success: function (d) {
-                    self.items = d.results;
-                    self.stage = 'options';
+                    self.years = d.results;
+                    self.stage = 'year';
                 },
                 error: function (e) {
                     console.log(e);
@@ -118,14 +106,51 @@ var app = new Vue({
 
             })
         },
+        selectYear: function(){
+            var self = this;
+            if(self.selectedYear.length <= 0){
+                alert('Please select a year to continue');
+                return false;
+            } 
+
+            $.ajax({
+                url: '/products/findItems',
+                method: 'POST',
+                data:{
+                    populate: 'remote',
+                    query: {
+                        make: self.selectedMake,
+                        model: self.selectedModel,
+                        startYear: self.selectedYear._id.startYear,
+                        endYear: self.selectedYear._id.endYear
+                    }
+                },
+                success: function (d) {
+                    self.items = d.results;
+                    self.features = {
+                        rsType: self.getUnique(d.results, 'rsType'),
+                        remoteType: self.getUnique(d.results, 'remote.name')
+                    }
+                    self.stage = 'options'
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            })
+        },
+        getValue(st, obj) {
+            return st.replace(/\[([^\]]+)]/g, '.$1').split('.').reduce(function(o, p) { 
+                return o[p];
+            }, obj);
+        },
         getUnique: function (arrOfObj, property) {
             var unique = {};
             var distinct = [];
             for (var i in arrOfObj) {
-                if (typeof (unique[arrOfObj[i][property]]) == "undefined") {
-                    distinct.push(arrOfObj[i][property]);
-                }
-                unique[arrOfObj[i][property]] = 0;
+                var val = this.getValue(property, arrOfObj[i]);
+                if(distinct.indexOf(val) == -1){
+                    distinct.push(val)
+                };
             }
             distinct = distinct.filter(function (n) { return n != undefined });
             return distinct.sort();

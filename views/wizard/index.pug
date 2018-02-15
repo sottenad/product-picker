@@ -2,16 +2,13 @@ extends ../layout
 
 block fullWidthContent
     #app 
-        p selected: {{selectedYear}} {{selectedMake}} {{selectedModel}}
+        p Vehicle: 
+            span(v-if="Object.keys(selectedYear).length > 0") {{selectedYear._id.startYear}} - {{selectedYear._id.endYear}} 
+            span {{selectedMake}} 
+            span {{selectedModel}}
         
         br 
-        #year(v-if="stage=='year'")
-            .row
-                .card.year( v-for="year in years" :value="year" @click="selectedYear = year" :class="{active: selectedYear == year}") 
-                    .card-block
-                        span {{year}}
-            .buttons
-                a.btn.btn-primary(@click="selectYear" :disabled="selectedYear == ''") Next
+        
 
         #make(v-if="stage == 'make'")
             h2 Select Make
@@ -21,8 +18,6 @@ block fullWidthContent
                     .card-block.text-center
                         span {{make}}
             .buttons
-                a.btn(@click="stage='year'; selectedMake=''") Back
-                | &nbsp;            
                 a.btn.btn-primary(@click="selectMake" :disabled="selectedMake == ''") Next
 
         #model(v-if="stage == 'model'")
@@ -33,17 +28,71 @@ block fullWidthContent
                     .card-block.text-center
                         span {{model}}
             .buttons
-                a.btn(@click="stage='make'; selectedModel=''") Back
+                a.btn.btn-secondary(@click="stage='make'; selectedModel=''") Back
                 | &nbsp;                       
                 a.btn.btn-primary(@click="selectModel" :disabled="selectedModel == ''") Next
+        #year(v-if="stage=='year'")
+            .row
+                .card.year( v-for="year in years" :value="year" @click="selectedYear = year" :class="{active: selectedYear == year}") 
+                    .card-block
+                        span {{year._id.startYear}} - {{year._id.endYear}}
+                        br
+                        span {{year._id.make}} {{year._id.model}}
+                        br
+                        span Key Type:{{year._id.keyType}}
+            .buttons
+                a.btn.btn-secondary(@click="stage='model'; selectedYear=''") Back
+                a.btn.btn-primary(@click="selectYear" :disabled="selectedYear == ''") Next
 
         #options(v-if="stage == 'options'")
             h2 Select options
-            ul  
-                li(v-for="item in items")
-                    span {{item}}
+            .row   
+                .col-sm-5
+                    label Features
+                    br
+                    select(v-model="selectedRsType")
+                        option
+                        option(v-for="opt in features.rsType") {{opt}}
+                .col-sm-3
+                    label Remote(s)
+                    br
+                    select(v-model="selectedRemoteType")
+                        option
+                        option(v-for="opt in features.remoteType") {{opt}}
+            table.table.table-striped
+                thead
+                    tr
+                        th Make
+                        th Model
+                        th Key Type
+                        th Part Number(s)
+                        th Cost
+                        th
+                tbody 
+                    tr(v-for="item in selectedOptions")
+                        td {{item.make}}
+                        td {{item.model}}
+                        td {{item.keyType}}
+                        td {{item.partNumber}}
+                        td.cost {{item.cost}}
+                        td  
+                            a.btn.btn-primary.btn-small(@click="stage='final'; selectedItem = item") Select
+                        
             .buttons
-                a.btn(@click="stage='model'; selectedOptions=[]") Back    
+                a.btn.btn-secondary(@click="stage='model'; selectedOptions=[]") Back    
+
+        #final(v-if="stage == 'final'")
+            .jumbotron
+                p.lead Thanks for selecting a product for your {{selectedYear._id.startYear}} - {{selectedYear._id.endYear}} {{selectedMake}} {{selectedModel}}
+                hr.my-4
+                p Please let your salesperson know that you need the following:
+                h3 {{selectedItem.partNumber}}
+                p and be sure to verify that your key is a:
+                h3 {{selectedItem.keyType}}
+            .buttons
+                a.btn.btn-secondary(@click="stage='options'") Back    
+                a.btn.btn-primary(@click="startOver") Start Over    
+
 
 block footerscripts
     script(src="./js/wizard.js")

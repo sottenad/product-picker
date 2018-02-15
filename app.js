@@ -93,6 +93,9 @@ app.use(session({
 
 //CSRF Free Routes here:
 app.post('/products/find', productController.find);
+app.post('/products/findYears', productController.findYears);
+app.post('/products/findItems', productController.findItems);
+
 
 app.use(flash());
 app.use(passport.initialize());
