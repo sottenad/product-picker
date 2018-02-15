@@ -77,8 +77,8 @@ exports.findYears = (req, res) => {
 
     Product.aggregate([
         {"$match" : {
-            make:"HONDA",
-            model:"CR-V"
+            make:q.make,
+            model:q.model
             }
         },
         {"$group":{
